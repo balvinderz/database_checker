@@ -65,7 +65,7 @@ class _DatabaseCardState extends State<DatabaseCard> {
     String url =
         "http://pyadmin.season-life.co.uk/api/jobss/approve/${widget.post.id}";
     try {
-      Response response = await get(url);
+      Response response = await get(Uri.parse(url));
       if (response.statusCode != 200) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Error occured"),
@@ -89,7 +89,7 @@ class _DatabaseCardState extends State<DatabaseCard> {
     String url =
         "http://pyadmin.season-life.co.uk/api/jobss/disapprove/${widget.post.id}";
     try {
-      Response response = await get(url);
+      Response response = await get(Uri.parse(url));
       if (response.statusCode != 200) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Error occured"),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,10 @@ class FirebaseNotifications {
   BuildContext context;
   FirebaseNotifications(this.context);
 
-  void setUpFirebase() {
-    _firebaseMessaging = FirebaseMessaging();
+  Future<void> setUpFirebase() async {
+    await Firebase.initializeApp();
+
+    _firebaseMessaging = FirebaseMessaging.instance;
     firebaseCloudMessaging_Listeners();
 
   }
@@ -25,34 +28,20 @@ class FirebaseNotifications {
 
     });
     _firebaseMessaging.subscribeToTopic("new_posts");
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      showDialog(context: context,builder: (_)=> AlertDialog(title: Text("Season-Life Admin",),
+        content: Text("Check New Posts"),
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print(message);
-        print('on message $message');
-        showDialog(context: context,builder: (_)=> AlertDialog(title: Text("Season-Life Admin",),
-          content: Text("Check New Posts"),
+      ));
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
 
-        ));
+    });
 
-
-
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
   }
 
   void iOS_Permission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+    _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
+
   }
 }

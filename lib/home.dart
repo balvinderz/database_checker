@@ -89,15 +89,22 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+try {
+  FirebaseNotifications(context).setUpFirebase();
+}catch(e)
+    {
 
-    FirebaseNotifications(context).setUpFirebase();
-
+    }
     getPage(baseUrl + "$index");
   }
 
   getPage(String url) async {
-    var response = await http.get(url);
+    print("mai chala");
+    print(url);
 
+    var response = await http.get(Uri.parse(url));
+    print("respone");
+    print(response.body);
     await getPosts(response.body);
   }
 

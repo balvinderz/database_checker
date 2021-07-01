@@ -31,7 +31,7 @@ class _ScriptContentState extends State<ScriptContent> {
           title: Text("File contents"),
         ),
         body: exiting ? Container() : FutureBuilder(
-          future: get(widget.url),
+          future: get(Uri.parse(widget.url)),
 
           builder: (context, snapshot) {
             if(!snapshot.hasData)
